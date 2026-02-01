@@ -26,12 +26,14 @@ File-based persistent memory that survives across sessions:
 # 1. Clone to templates directory
 git clone https://github.com/whjelmar/claude-memory-system.git ~/.claude/templates/claude-memory-system
 
-# 2. Run setup in your project
+# 2. Run full setup in your project (includes slash commands)
 cd /path/to/your/project
-bash ~/.claude/templates/claude-memory-system/setup.sh
+bash ~/.claude/templates/claude-memory-system/setup.sh --full
+```
 
-# 3. Install slash commands (optional)
-cp -r ~/.claude/templates/claude-memory-system/skills/* ~/.claude/skills/
+Or on Windows PowerShell:
+```powershell
+& "$env:USERPROFILE\.claude\templates\claude-memory-system\setup.ps1" -Full
 ```
 
 Then use it:
@@ -40,6 +42,15 @@ You: /memory-start          # Load context at session start
 You: [work on your project]
 You: /memory-save           # Save session at end
 ```
+
+### Setup Options
+
+| Option | Bash | PowerShell | Description |
+|--------|------|------------|-------------|
+| Basic | `setup.sh` | `setup.ps1` | Project memory structure only |
+| With skills | `setup.sh --install-skills` | `setup.ps1 -InstallSkills` | + slash commands |
+| With MCP | `setup.sh --build-mcp` | `setup.ps1 -BuildMcp` | + MCP server |
+| Everything | `setup.sh --full` | `setup.ps1 -Full` | All features |
 
 **[→ Full Quick Start Guide](docs/QUICK-START.md)**
 
