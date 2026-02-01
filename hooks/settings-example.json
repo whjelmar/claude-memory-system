@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "_comment": "Claude Code settings.json example for memory system hooks",
+  "_instructions": [
+    "Copy relevant sections to your .claude/settings.json (project) or user settings",
+    "Choose either bash OR PowerShell configuration based on your platform",
+    "Adjust paths if using from user settings (use absolute paths)"
+  ],
+
+  "hooks": {
+    "_comment_hooks": "Hook configurations for Claude Memory System",
+
+    "SessionStart": [
+      {
+        "_comment": "Memory system initialization - Bash (Linux/macOS/Git Bash)",
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "_comment": "Session end reminder - Bash (Linux/macOS/Git Bash)",
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash hooks/session-end.sh"
+          }
+        ]
+      }
+    ]
+  },
+
+  "_alternatives": {
+    "_comment": "Alternative configurations for different platforms",
+
+    "windows_powershell": {
+      "SessionStart": [
+        {
+          "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "powershell -ExecutionPolicy Bypass -File hooks/session-start.ps1"
+            }
+          ]
+        }
+      ],
+      "Stop": [
+        {
+          "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "powershell -ExecutionPolicy Bypass -File hooks/session-end.ps1"
+            }
+          ]
+        }
+      ]
+    },
+
+    "cross_platform_fallback": {
+      "_comment": "Tries bash first, falls back to PowerShell",
+      "SessionStart": [
+        {
+          "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash hooks/session-start.sh 2>/dev/null || powershell -ExecutionPolicy Bypass -File hooks/session-start.ps1"
+            }
+          ]
+        }
+      ]
+    },
+
+    "with_project_matcher": {
+      "_comment": "Only run for specific projects using glob pattern",
+      "SessionStart": [
+        {
+          "matcher": "**/my-project/**",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash hooks/session-start.sh"
+            }
+          ]
+        }
+      ]
+    },
+
+    "global_user_settings": {
+      "_comment": "For user settings, use absolute paths",
+      "SessionStart": [
+        {
+          "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash /home/user/tools/claude-memory-system/hooks/session-start.sh"
+            }
+          ]
+        }
+      ]
+    },
+
+    "windows_global_user_settings": {
+      "_comment": "Windows user settings with absolute path",
+      "SessionStart": [
+        {
+          "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "powershell -ExecutionPolicy Bypass -File C:\\Users\\YourName\\tools\\claude-memory-system\\hooks\\session-start.ps1"
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  "_minimal_config": {
+    "_comment": "Minimal working configuration - copy this to your settings.json",
+    "hooks": {
+      "SessionStart": [
+        {
+          "matcher": "",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash hooks/session-start.sh"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
