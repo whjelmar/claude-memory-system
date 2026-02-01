@@ -8,3 +8,13 @@ Thumbs.db
 *~
 .idea/
 .vscode/
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# Build artifacts (keep dist for distribution)
+# mcp-server/dist/
+
+# Local settings
+.claude/settings.local.json

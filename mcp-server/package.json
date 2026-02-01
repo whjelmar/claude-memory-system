@@ -1,0 +1,35 @@
+{
+  "name": "claude-memory-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Claude Memory System - provides memory tools for persistent context",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "npx tsx src/index.ts",
+    "watch": "npx tsc --watch"
+  },
+  "bin": {
+    "claude-memory-server": "dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "claude",
+    "memory",
+    "context"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
