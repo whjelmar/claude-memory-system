@@ -8,7 +8,10 @@
     "build": "npx tsc",
     "start": "node dist/index.js",
     "dev": "npx tsx src/index.ts",
-    "watch": "npx tsc --watch"
+    "watch": "npx tsc --watch",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch"
   },
   "bin": {
     "claude-memory-server": "dist/index.js"
@@ -25,7 +28,10 @@
     "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.11",
     "@types/node": "^20.10.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
     "tsx": "^4.7.0",
     "typescript": "^5.3.0"
   },
