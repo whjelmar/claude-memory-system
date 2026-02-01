@@ -16,12 +16,12 @@ A file-based persistent memory system for cross-session context preservation in 
 
 **Bash (Linux/macOS/Git Bash on Windows):**
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-memory-system.git ~/.claude/templates/claude-memory-system
+git clone https://github.com/whjelmar/claude-memory-system.git ~/.claude/templates/claude-memory-system
 ```
 
 **PowerShell (Windows):**
 ```powershell
-git clone https://github.com/YOUR_USERNAME/claude-memory-system.git "$env:USERPROFILE\.claude\templates\claude-memory-system"
+git clone https://github.com/whjelmar/claude-memory-system.git "$env:USERPROFILE\.claude\templates\claude-memory-system"
 ```
 
 ### 2. Run setup in your project
