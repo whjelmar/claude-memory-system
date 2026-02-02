@@ -13,8 +13,11 @@ Thumbs.db
 node_modules/
 npm-debug.log
 
-# Build artifacts (keep dist for distribution)
-# mcp-server/dist/
+# Build artifacts (keep dist for distribution, exclude test builds)
+mcp-server/dist/__tests__/
+
+# Test coverage
+coverage/
 
 # Local settings
 .claude/settings.local.json

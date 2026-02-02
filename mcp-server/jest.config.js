@@ -25,4 +25,5 @@ export default {
   coverageReporters: ['text', 'lcov', 'html'],
   verbose: true,
   testTimeout: 10000,
+  clearMocks: true,
 };
