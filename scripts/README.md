@@ -6,12 +6,23 @@ Each script is available in both Bash (`.sh`) and PowerShell (`.ps1`) versions f
 
 ## Scripts Overview
 
+### Core Utilities
+
 | Script | Purpose |
 |--------|---------|
 | `next-decision-number` | Get the next sequential decision number |
 | `prune-sessions` | Archive old session summaries |
 | `index-knowledge` | Generate a knowledge base index |
 | `validate-memory` | Check memory system integrity |
+
+### Enhanced Features
+
+| Script | Purpose |
+|--------|---------|
+| `auto-summary` | Generate draft session summary from git diff |
+| `link-knowledge` | Find and create cross-references in knowledge base |
+| `memory-analytics` | Generate analytics about memory usage |
+| `generate-dashboard` | Create a markdown dashboard with metrics |
 
 ---
 
@@ -352,6 +363,253 @@ Run the setup script first:
 # or
 .\setup.ps1
 ```
+
+---
+
+---
+
+## auto-summary
+
+Generates a draft session summary by analyzing git changes since the last session.
+
+### Usage
+
+**Bash:**
+```bash
+./scripts/auto-summary.sh [project-dir] [options]
+```
+
+**PowerShell:**
+```powershell
+.\scripts\auto-summary.ps1 [-ProjectDir <path>] [-Output <file>] [-Since <timestamp>]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--output FILE` | Write to file instead of stdout |
+| `--since TIMESTAMP` | Diff since this time (default: last session) |
+| `--help` | Show help |
+
+### Example Output
+
+```markdown
+# Session Summary: 2024-01-15 16:30
+
+## Git Activity
+- Files changed: 5
+- Insertions: +120
+- Deletions: -45
+- Commits: 3
+
+### Changed Files
+- src/auth/token.ts (modified)
+- src/api/routes.ts (modified)
+- tests/auth.test.ts (added)
+
+### Commit Messages
+- "Fix token refresh race condition"
+- "Add retry logic with backoff"
+
+## Draft Summary
+Modified authentication and API code with new tests.
+Focused on token handling improvements.
+
+## Work Completed (fill in)
+- [ ]
+
+## Decisions Made
+- [ ]
+
+## Next Steps
+- [ ]
+```
+
+### When to Use
+
+- At the end of a session to draft your summary
+- When you forgot what you worked on
+- To capture git activity automatically
+
+---
+
+## link-knowledge
+
+Scans knowledge files and suggests/creates cross-references between related topics.
+
+### Usage
+
+**Bash:**
+```bash
+./scripts/link-knowledge.sh [project-dir] [options]
+```
+
+**PowerShell:**
+```powershell
+.\scripts\link-knowledge.ps1 [-ProjectDir <path>] [-AutoInsert] [-DryRun]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--auto-insert` | Automatically insert suggested links |
+| `--dry-run` | Show changes without modifying files |
+| `--help` | Show help |
+
+### Example Output
+
+```
+Scanning knowledge base for cross-references...
+
+=== Suggested Links ===
+
+File: authentication.md
+  Line 15: "token refresh" -> [Token Patterns](./token-patterns.md)
+  Line 23: "rate limiting" -> [API Patterns](./api-patterns.md)
+
+File: api-patterns.md
+  Line 8: "OAuth2" -> [Authentication](./authentication.md)
+
+=== Summary ===
+Files scanned: 5
+Links suggested: 3
+```
+
+### When to Use
+
+- After adding new knowledge files
+- When knowledge base grows large
+- To improve discoverability
+
+---
+
+## memory-analytics
+
+Generates analytics about memory system usage patterns.
+
+### Usage
+
+**Bash:**
+```bash
+./scripts/memory-analytics.sh [project-dir] [options]
+```
+
+**PowerShell:**
+```powershell
+.\scripts\memory-analytics.ps1 [-ProjectDir <path>] [-Json]
+```
+
+### Options
+
+| Option | Description |
+|--------|-------------|
+| `--json` | Output as JSON for programmatic use |
+| `--help` | Show help |
+
+### Example Output
+
+```
+=== Memory System Analytics ===
+
+## Overview
+- Total sessions: 45
+- Total decisions: 12
+- Knowledge topics: 8
+- Active plan: Auth Refactor
+
+## Activity Trends
+This week:  5 sessions, 2 decisions
+Last week:  7 sessions, 1 decision
+This month: 23 sessions, 5 decisions
+
+## Most Active
+- Day: Tuesday (12 sessions)
+- Hour: 2-3 PM (18 sessions)
+
+## Knowledge Health
+| Topic | Last Updated | Status |
+|-------|--------------|--------|
+| auth | 2 days | Fresh |
+| api | 15 days | Recent |
+| db | 45 days | Stale |
+```
+
+### When to Use
+
+- Weekly/monthly reviews
+- Understanding work patterns
+- Identifying stale content
+
+---
+
+## generate-dashboard
+
+Creates a comprehensive markdown dashboard summarizing memory system state.
+
+### Usage
+
+**Bash:**
+```bash
+./scripts/generate-dashboard.sh [project-dir] [output-file]
+```
+
+**PowerShell:**
+```powershell
+.\scripts\generate-dashboard.ps1 [-ProjectDir <path>] [-Output <file>]
+```
+
+### Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| output-file | `.claude/memory/DASHBOARD.md` | Where to save dashboard |
+
+### Generated Dashboard
+
+```markdown
+# Memory System Dashboard
+Generated: 2024-01-15 10:30
+
+## Overview
+| Metric | Value |
+|--------|-------|
+| Total Sessions | 45 |
+| Total Decisions | 12 |
+| Knowledge Topics | 8 |
+| Active Plan | Auth Refactor (60%) |
+
+## Weekly Activity
+Week        | Sessions | Decisions
+------------|----------|----------
+This week   | ████░ 5  | 2
+Last week   | ██████░ 7| 1
+2 weeks ago | ███░ 4   | 3
+
+## Knowledge Base Health
+| Topic | Last Updated | Status |
+|-------|--------------|--------|
+| authentication | 2 days | 🟢 Fresh |
+| api-patterns | 15 days | 🟡 Recent |
+| database | 45 days | 🔴 Stale |
+
+## Recommendations
+- ⚠️ Update stale knowledge: database (45 days old)
+- 💡 3 sessions without decisions - review if any were made
+- ✅ Memory system healthy overall
+
+## Quick Actions
+- `/memory-status` - Current state
+- `/memory-review this week` - Recent activity
+- `/memory-knowledge` - Update knowledge base
+```
+
+### When to Use
+
+- Start of week for overview
+- Before standups/reviews
+- Share with team members
 
 ---
 

@@ -18,6 +18,7 @@ export interface AddKnowledgeResult {
   created: boolean;
   updated: boolean;
   indexUpdated: boolean;
+  related_topics: string[];
 }
 
 /**
@@ -95,6 +96,130 @@ function appendToKnowledgeContent(
   updated += `\n---\n\n## Update (${dateString})\n\n${newContent}\n`;
 
   return updated;
+}
+
+/**
+ * Extract key terms from content for topic matching
+ */
+function extractKeyTerms(content: string): string[] {
+  const terms: string[] = [];
+
+  // Extract bold text
+  const boldMatches = content.match(/\*\*([^*]+)\*\*/g);
+  if (boldMatches) {
+    terms.push(...boldMatches.map((m) => m.replace(/\*\*/g, "").toLowerCase()));
+  }
+
+  // Extract header content
+  const headerMatches = content.match(/^##+ (.+)$/gm);
+  if (headerMatches) {
+    terms.push(
+      ...headerMatches.map((m) => m.replace(/^##+ /, "").toLowerCase())
+    );
+  }
+
+  // Extract capitalized phrases (potential proper nouns/concepts)
+  const capitalMatches = content.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b/g);
+  if (capitalMatches) {
+    terms.push(...capitalMatches.map((m) => m.toLowerCase()));
+  }
+
+  return [...new Set(terms)];
+}
+
+/**
+ * Calculate similarity between two strings using word overlap
+ */
+function calculateSimilarity(str1: string, str2: string): number {
+  const words1 = str1.toLowerCase().split(/\s+/);
+  const words2 = str2.toLowerCase().split(/\s+/);
+
+  const set1 = new Set(words1);
+  const set2 = new Set(words2);
+
+  let intersection = 0;
+  for (const word of set1) {
+    if (set2.has(word)) {
+      intersection++;
+    }
+  }
+
+  const union = new Set([...words1, ...words2]).size;
+  return union > 0 ? intersection / union : 0;
+}
+
+/**
+ * Find related topics based on content analysis
+ */
+async function findRelatedTopics(
+  knowledgePath: string,
+  currentTopic: string,
+  currentContent: string
+): Promise<string[]> {
+  const relatedTopics: Array<{ topic: string; score: number }> = [];
+  const currentTerms = extractKeyTerms(currentContent);
+  const currentSlug = currentTopic
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  // Get all knowledge files
+  const files = await listFiles(knowledgePath);
+  const mdFiles = files.filter(
+    (f) =>
+      f.endsWith(".md") &&
+      f.toLowerCase() !== "index.md" &&
+      f.toLowerCase() !== "index.md"
+  );
+
+  for (const file of mdFiles) {
+    const filePath = path.join(knowledgePath, file);
+    const fileContent = await readFileSafe(filePath);
+
+    if (!fileContent) continue;
+
+    // Get topic name from first line
+    const firstLine = fileContent.split("\n")[0] || "";
+    const fileTopic = firstLine.replace(/^#+ /, "").trim();
+    const fileSlug = file.replace(/\.md$/, "").toLowerCase();
+
+    // Skip self
+    if (fileSlug === currentSlug || fileTopic.toLowerCase() === currentTopic.toLowerCase()) {
+      continue;
+    }
+
+    // Calculate relevance score
+    let score = 0;
+
+    // Check if topic name appears in content
+    if (currentContent.toLowerCase().includes(fileTopic.toLowerCase())) {
+      score += 0.5;
+    }
+
+    // Check if current topic appears in file content
+    if (fileContent.toLowerCase().includes(currentTopic.toLowerCase())) {
+      score += 0.5;
+    }
+
+    // Extract terms from file and check overlap
+    const fileTerms = extractKeyTerms(fileContent);
+    const termOverlap = currentTerms.filter((t) =>
+      fileTerms.some((ft) => ft.includes(t) || t.includes(ft))
+    ).length;
+    score += termOverlap * 0.1;
+
+    // Calculate content similarity
+    const contentSimilarity = calculateSimilarity(currentContent, fileContent);
+    score += contentSimilarity * 0.3;
+
+    if (score > 0.1) {
+      relatedTopics.push({ topic: fileTopic, score });
+    }
+  }
+
+  // Sort by score and return top 5
+  relatedTopics.sort((a, b) => b.score - a.score);
+  return relatedTopics.slice(0, 5).map((t) => t.topic);
 }
 
 /**
@@ -186,11 +311,19 @@ export async function executeAddKnowledge(
     isNew
   );
 
+  // Find related topics
+  const related_topics = await findRelatedTopics(
+    knowledgePath,
+    params.topic,
+    params.content
+  );
+
   return {
     knowledgeFile: filePath,
     created: isNew,
     updated: !isNew,
     indexUpdated,
+    related_topics,
   };
 }
 
@@ -199,13 +332,34 @@ export async function executeAddKnowledge(
  */
 export function formatAddKnowledgeResult(result: AddKnowledgeResult): string {
   const action = result.created ? "Created" : "Updated";
-  return [
+  const lines = [
     `# Knowledge ${action} Successfully`,
     "",
     `**File:** ${result.knowledgeFile}`,
     `**Action:** ${action}`,
     `**Index Updated:** ${result.indexUpdated ? "Yes" : "No (already indexed)"}`,
     "",
-    `The knowledge has been ${action.toLowerCase()} in the memory system.`,
-  ].join("\n");
+  ];
+
+  // Add related topics section
+  if (result.related_topics && result.related_topics.length > 0) {
+    lines.push("## Related Topics");
+    lines.push("");
+    lines.push("Consider linking to these existing knowledge files:");
+    lines.push("");
+    for (const topic of result.related_topics) {
+      const slug = topic
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      lines.push(`- [${topic}](./knowledge/${slug}.md)`);
+    }
+    lines.push("");
+  }
+
+  lines.push(
+    `The knowledge has been ${action.toLowerCase()} in the memory system.`
+  );
+
+  return lines.join("\n");
 }

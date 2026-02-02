@@ -126,6 +126,20 @@ You: /memory-save           # Save session at end
 | `prune-sessions.sh` | Archive old sessions |
 | `index-knowledge.sh` | Generate knowledge index |
 | `next-decision-number.sh` | Get next decision number |
+| `auto-summary.sh` | Generate session summary from git diff |
+| `link-knowledge.sh` | Create cross-references in knowledge base |
+| `memory-analytics.sh` | Generate usage analytics |
+| `generate-dashboard.sh` | Create markdown dashboard |
+
+### Session Templates
+
+Pre-built templates for different work types:
+- **bugfix** - Bug fix sessions with root cause analysis
+- **feature** - New feature development tracking
+- **refactor** - Code refactoring with before/after notes
+- **research** - Research and exploration sessions
+- **review** - Code review sessions
+- **planning** - Architecture and planning sessions
 
 ---
 
