@@ -13,13 +13,19 @@ Complete reference for all slash commands provided by the Claude Memory System.
    - [/memory-save](#memory-save)
    - [/memory-status](#memory-status)
    - [/memory-decide](#memory-decide)
+   - [/memory-search](#memory-search)
+   - [/memory-knowledge](#memory-knowledge)
+   - [/memory-plan](#memory-plan)
+   - [/memory-review](#memory-review)
 4. [Tips & Tricks](#tips--tricks)
 
 ---
 
 ## Overview
 
-The Claude Memory System provides 4 slash commands for managing session memory:
+The Claude Memory System provides 8 slash commands for managing session memory:
+
+### Core Commands (Session Lifecycle)
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
@@ -27,6 +33,15 @@ The Claude Memory System provides 4 slash commands for managing session memory:
 | `/memory-save` | Save session summary | End of every session |
 | `/memory-status` | View memory system state | Anytime to check status |
 | `/memory-decide` | Record a decision (ADR) | When making significant choices |
+
+### Extended Commands (Knowledge & Planning)
+
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/memory-search` | Search across memory files | Finding past decisions or context |
+| `/memory-knowledge` | Manage knowledge base | Adding/viewing domain learnings |
+| `/memory-plan` | Create and track plans | Multi-session projects |
+| `/memory-review` | Review history & reports | Standups, retros, 1:1s |
 
 ---
 
@@ -580,4 +595,277 @@ You: 1
 Claude: Reconstructing from last 3 sessions...
         [Shows reconstructed context]
         Does this look correct?
+```
+
+---
+
+## Extended Commands
+
+### /memory-search
+
+**Purpose:** Search across all memory files for specific content.
+
+**Trigger phrases:**
+- `/memory-search`
+- "search memory", "find in memory"
+- "search sessions", "search decisions"
+
+#### Basic Usage
+
+```
+You: /memory-search rate limiting
+
+Claude: ## Memory Search Results
+
+        **Query**: "rate limiting"
+        **Matches**: 4 results in 3 files
+
+        ### Decisions
+        - 0003_rate_limiting.md: Line 1, 15, 22
+
+        ### Sessions
+        - 2024-01-14_summary.md: Line 5, 12
+
+        Would you like me to read any of these files?
+```
+
+#### Scoped Search
+
+```
+You: /memory-search decisions: authentication
+
+Claude: Searching only in decisions/...
+        Found 2 matches in decision records.
+```
+
+---
+
+### /memory-knowledge
+
+**Purpose:** Interactive knowledge base management.
+
+**Trigger phrases:**
+- `/memory-knowledge`
+- "add knowledge", "update knowledge"
+- "what do we know about"
+
+#### List Knowledge Base
+
+```
+You: /memory-knowledge
+
+Claude: 📚 Knowledge Base Contents
+
+        Found 4 knowledge files:
+
+        | Topic | Last Updated |
+        |-------|--------------|
+        | api-patterns | 2024-01-15 |
+        | authentication | 2024-01-14 |
+        | stripe-integration | 2024-01-10 |
+
+        Commands: "show [topic]", "add to [topic]", "create [topic]"
+```
+
+#### Quick Add
+
+```
+You: /memory-knowledge add: Stripe returns 200 even for errors
+
+Claude: Which topic? (1) stripe-integration, (2) api-patterns, (3) new
+
+You: 1
+
+Claude: ✅ Added to stripe-integration.md
+```
+
+#### Create New Topic
+
+```
+You: /memory-knowledge create testing-patterns
+
+Claude: Creating new knowledge file...
+
+        What's the first piece of knowledge to add?
+
+You: Use factories over fixtures for test data
+
+Claude: ✅ Created testing-patterns.md with initial content
+```
+
+---
+
+### /memory-plan
+
+**Purpose:** Create and track implementation plans for multi-session projects.
+
+**Trigger phrases:**
+- `/memory-plan`
+- "create plan", "show plan", "update plan"
+- "what's the plan", "next steps"
+
+#### Show Current Plan
+
+```
+You: /memory-plan
+
+Claude: 📋 Active Plan: Auth Refactor
+
+        Status: In Progress
+        Progress: 40% (6/15 tasks)
+
+        ✅ Phase 1: Setup (Complete)
+        🔄 Phase 2: Implementation (In Progress)
+           - [x] Create models
+           - [ ] Add validation
+           - [ ] Write tests
+        ⏳ Phase 3: Integration
+        ⏳ Phase 4: Testing
+
+        Commands: "complete [task]", "add finding", "block [reason]"
+```
+
+#### Create New Plan
+
+```
+You: /memory-plan create: Add dark mode support
+
+Claude: Let's create a plan for dark mode.
+
+        Suggested phases:
+        1. Design System Setup
+        2. Component Updates
+        3. User Preferences
+        4. Polish
+
+        Does this structure work?
+```
+
+#### Update Progress
+
+```
+You: /memory-plan complete "Add validation"
+
+Claude: ✅ Marked complete: Add validation
+
+        Phase 2 Progress: 2/3 tasks
+        Overall: 47% complete
+
+        Next task: Write tests
+```
+
+#### Add Finding
+
+```
+You: /memory-plan finding: API requires OAuth2 not API keys
+
+Claude: 📝 Added to findings.md
+
+        This may impact Phase 3. Add task for OAuth2 setup?
+```
+
+---
+
+### /memory-review
+
+**Purpose:** Review session history and generate reports for standups, retros, and documentation.
+
+**Trigger phrases:**
+- `/memory-review`
+- "review sessions", "what did we do"
+- "weekly review", "standup", "retro"
+
+#### Recent Activity
+
+```
+You: /memory-review
+
+Claude: 📊 Memory Review (Last 7 days)
+
+        Sessions: 8 recorded
+        Decisions: 3 made
+        Knowledge: 2 updates
+
+        | Date | Focus | Outcome |
+        |------|-------|---------|
+        | Jan 15 | Auth | Completed token refresh |
+        | Jan 14 | Auth | Fixed race condition |
+        ...
+```
+
+#### Time-Based Review
+
+```
+You: /memory-review this week
+
+Claude: 📅 This Week (Jan 13-19)
+
+        ## Accomplishments
+        ✅ Completed Phase 1 auth refactor
+        ✅ Fixed token refresh issue
+        ✅ Added rate limiting
+
+        ## Decisions Made
+        - #0005: Exponential backoff
+        - #0004: Token bucket rate limiting
+
+        ## Next Week
+        - Complete Phase 2
+        - Start integration tests
+```
+
+#### Generate Standup
+
+```
+You: /memory-review standup
+
+Claude: 📢 Standup Summary
+
+        **Yesterday:**
+        - Fixed token refresh race condition
+        - Added exponential backoff retry
+
+        **Today:**
+        - Continue token rotation
+        - Start integration tests
+
+        **Blockers:** None
+```
+
+#### Generate Retrospective
+
+```
+You: /memory-review retro
+
+Claude: 📝 Retrospective Notes
+
+        ## What Went Well
+        ✅ Clear plan helped focus
+        ✅ Decision records prevented backtracking
+
+        ## What Could Improve
+        ⚠️ Underestimated token refresh complexity
+        ⚠️ Should have checked rate limits earlier
+
+        ## Action Items
+        - [ ] Add rate limit detection to checklist
+        - [ ] Include edge cases in estimates
+```
+
+#### Decision Archaeology
+
+```
+You: /memory-review why did we choose PostgreSQL?
+
+Claude: 🔍 Found Decision #0003
+
+        **PostgreSQL for Session Storage**
+        Date: January 10, 2024
+
+        We chose PostgreSQL because:
+        - Persistent by default (vs Redis)
+        - Team familiarity
+        - Same connection as main DB
+
+        Related session: Jan 10 planning meeting
 ```

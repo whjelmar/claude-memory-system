@@ -94,6 +94,10 @@ You: /memory-save           # Save session at end
 | `/memory-save` | Save session summary, update context |
 | `/memory-status` | View memory system state |
 | `/memory-decide` | Record a decision (ADR-style) |
+| `/memory-search` | Search across all memory files |
+| `/memory-knowledge` | Manage knowledge base interactively |
+| `/memory-plan` | Create and track implementation plans |
+| `/memory-review` | Review session history and generate reports |
 
 **[→ Skills Reference](docs/SKILLS-REFERENCE.md)**
 
