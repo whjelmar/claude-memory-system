@@ -26,9 +26,14 @@ This project uses a file-based memory system for cross-session context preservat
 ```
 
 **Relevant skills:**
-- `/project-workflow` - Session management commands including `/wrap-session`
-- `/planning-with-files` - Manus-style task planning
-- `/executing-plans` - Resume work from a previous plan
+- `/memory-start` - Load context at session start
+- `/memory-save` - Save session summary when ending work
+- `/memory-plan` - Create and track implementation plans
+- `/memory-status` - Check memory system state
+- `/memory-decide` - Record architectural decisions (ADRs)
+- `/memory-knowledge` - Manage knowledge base
+- `/memory-search` - Search across memory files
+- `/memory-review` - Review session history and progress
 
 **For parallel work:**
 ```python

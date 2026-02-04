@@ -139,11 +139,16 @@ if [ "$INSTALL_SKILLS" = true ]; then
 
     mkdir -p "$CLAUDE_SKILLS_DIR"
 
-    for skill in "$SKILLS_DIR"/*.md; do
-        if [ -f "$skill" ]; then
-            skill_name=$(basename "$skill")
-            cp "$skill" "$CLAUDE_SKILLS_DIR/"
-            echo "  Installed: $skill_name"
+    # Skills are now directories containing SKILL.md
+    for skill_dir in "$SKILLS_DIR"/*/; do
+        if [ -d "$skill_dir" ] && [ -f "$skill_dir/SKILL.md" ]; then
+            skill_name=$(basename "$skill_dir")
+            # Remove old flat file if exists
+            rm -f "$CLAUDE_SKILLS_DIR/$skill_name.md" 2>/dev/null
+            # Copy skill directory
+            rm -rf "$CLAUDE_SKILLS_DIR/$skill_name"
+            cp -r "$skill_dir" "$CLAUDE_SKILLS_DIR/$skill_name"
+            echo "  Installed: /$skill_name"
         fi
     done
 
