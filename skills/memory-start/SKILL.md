@@ -1,15 +1,10 @@
-# Memory Start Skill
+---
+description: Load context and resume work from memory system. Use when starting a session, resuming work, or asking what was being worked on.
+---
+
+# Memory Start
 
 Load context and resume work from the memory system at session start.
-
-## Trigger Phrases
-- `/memory-start`
-- "start session", "resume work", "load context"
-- "what was I working on"
-- "continue from last session"
-
-## Description
-This skill reads and displays context from the Claude Memory System to help resume work seamlessly across sessions. It loads the current working context, active plan (if any), and optionally shows recent session summaries.
 
 ## Instructions
 
@@ -81,36 +76,3 @@ Ready to continue. What would you like to work on?
 - If `.claude/memory/` directory doesn't exist, inform user the memory system needs to be set up first
 - If context file is empty or missing, offer to help create initial context
 - Continue gracefully if optional files (plan, sessions) don't exist
-
-## Example Output
-
-```
-## Session Context Loaded
-
-### Current Focus
-Implementing user authentication system. Immediate goals:
-- Complete JWT token refresh logic
-- Add password reset endpoint
-
-### Active Plan
-**Task**: Authentication System Implementation
-**Status**: In Progress (Phase 2 of 3)
-**Next Steps**:
-- [ ] Implement token refresh endpoint
-- [ ] Add rate limiting to auth routes
-
-### Important State
-- Blocked on: Waiting for Redis connection string from DevOps
-- Dependencies: redis, jsonwebtoken packages installed
-
-### Recent Sessions
-- 2024-01-15_14-30_summary.md - Completed login/logout endpoints
-- 2024-01-14_10-00_summary.md - Set up auth middleware
-- 2024-01-13_16-45_summary.md - Database schema design
-
-### Suggested Next Steps
-Continue with token refresh implementation, or resolve Redis blocker first.
-
----
-Ready to continue. What would you like to work on?
-```
