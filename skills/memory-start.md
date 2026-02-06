@@ -1,3 +1,10 @@
+---
+name: memory-start
+description: >
+  Load context and resume work from the memory system at session start.
+  Reads current working context, active plan, and recent sessions.
+---
+
 # Memory Start Skill
 
 Load context and resume work from the memory system at session start.

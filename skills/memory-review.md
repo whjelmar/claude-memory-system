@@ -1,3 +1,10 @@
+---
+name: memory-review
+description: >
+  Review and analyze session history, decisions, and project progress over time.
+  Generate standups, retrospectives, and time-based summaries.
+---
+
 # Memory Review Skill
 
 Review and analyze session history, decisions, and project progress over time.

@@ -1,3 +1,10 @@
+---
+name: memory-knowledge
+description: >
+  Interactive knowledge base management for accumulating and organizing
+  domain learnings. Create, view, update, and organize knowledge files.
+---
+
 # Memory Knowledge Skill
 
 Interactive knowledge base management for accumulating and organizing domain learnings.

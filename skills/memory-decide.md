@@ -1,3 +1,10 @@
+---
+name: memory-decide
+description: >
+  Create a new decision record (ADR) in the memory system.
+  Auto-numbers decisions and prompts for structured decision details.
+---
+
 # Memory Decide Skill
 
 Create a new decision record (ADR) in the memory system.

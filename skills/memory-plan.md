@@ -1,3 +1,10 @@
+---
+name: memory-plan
+description: >
+  Create, manage, and track implementation plans for multi-session projects.
+  Supports phased plans, progress tracking, findings, and blockers.
+---
+
 # Memory Plan Skill
 
 Create, manage, and track implementation plans for multi-session projects.

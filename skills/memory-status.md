@@ -1,3 +1,10 @@
+---
+name: memory-status
+description: >
+  Show the current state of the memory system including context summary,
+  active plan status, file counts, and recent activity.
+---
+
 # Memory Status Skill
 
 Show the current state of the memory system.

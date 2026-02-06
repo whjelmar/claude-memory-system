@@ -1,3 +1,10 @@
+---
+name: memory-search
+description: >
+  Search across memory files for specific content.
+  Searches sessions, decisions, and knowledge files by query.
+---
+
 # Memory Search Skill
 
 Search across memory files for specific content.

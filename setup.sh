@@ -141,9 +141,11 @@ if [ "$INSTALL_SKILLS" = true ]; then
 
     for skill in "$SKILLS_DIR"/*.md; do
         if [ -f "$skill" ]; then
-            skill_name=$(basename "$skill")
-            cp "$skill" "$CLAUDE_SKILLS_DIR/"
-            echo "  Installed: $skill_name"
+            skill_name=$(basename "$skill" .md)
+            skill_dir="$CLAUDE_SKILLS_DIR/$skill_name"
+            mkdir -p "$skill_dir"
+            cp "$skill" "$skill_dir/SKILL.md"
+            echo "  Installed: /$(echo "$skill_name")"
         fi
     done
 

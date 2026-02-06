@@ -1,3 +1,10 @@
+---
+name: memory-save
+description: >
+  Save a session summary and update context for the next session.
+  Creates session summary file and updates current context for continuity.
+---
+
 # Memory Save Skill
 
 Save a session summary and update context for the next session.

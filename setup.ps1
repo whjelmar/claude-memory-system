@@ -164,8 +164,13 @@ if ($InstallSkills) {
 
     $skillFiles = Get-ChildItem -Path $SkillsDir -Filter "*.md" -ErrorAction SilentlyContinue
     foreach ($skill in $skillFiles) {
-        Copy-Item -Path $skill.FullName -Destination $ClaudeSkillsDir -Force
-        Write-Host "  Installed: $($skill.Name)" -ForegroundColor Green
+        $skillName = $skill.BaseName
+        $skillDir = Join-Path $ClaudeSkillsDir $skillName
+        if (-not (Test-Path $skillDir)) {
+            New-Item -ItemType Directory -Path $skillDir -Force | Out-Null
+        }
+        Copy-Item -Path $skill.FullName -Destination (Join-Path $skillDir "SKILL.md") -Force
+        Write-Host "  Installed: /$skillName" -ForegroundColor Green
     }
 
     Write-Host ""
