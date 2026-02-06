@@ -162,10 +162,20 @@ if ($InstallSkills) {
         New-Item -ItemType Directory -Path $ClaudeSkillsDir -Force | Out-Null
     }
 
-    $skillFiles = Get-ChildItem -Path $SkillsDir -Filter "*.md" -ErrorAction SilentlyContinue
-    foreach ($skill in $skillFiles) {
-        Copy-Item -Path $skill.FullName -Destination $ClaudeSkillsDir -Force
-        Write-Host "  Installed: $($skill.Name)" -ForegroundColor Green
+    # Skills are now directories containing SKILL.md
+    $skillDirs = Get-ChildItem -Path $SkillsDir -Directory -ErrorAction SilentlyContinue
+    foreach ($skill in $skillDirs) {
+        $skillMd = Join-Path $skill.FullName "SKILL.md"
+        if (Test-Path $skillMd) {
+            $destDir = Join-Path $ClaudeSkillsDir $skill.Name
+            # Remove old flat file if exists
+            $oldFile = Join-Path $ClaudeSkillsDir "$($skill.Name).md"
+            if (Test-Path $oldFile) { Remove-Item $oldFile -Force }
+            # Copy skill directory
+            if (Test-Path $destDir) { Remove-Item $destDir -Recurse -Force }
+            Copy-Item -Path $skill.FullName -Destination $destDir -Recurse -Force
+            Write-Host "  Installed: /$($skill.Name)" -ForegroundColor Green
+        }
     }
 
     Write-Host ""
@@ -243,10 +253,14 @@ Write-Host ""
 
 if ($InstallSkills) {
     Write-Host "Slash commands installed:" -ForegroundColor White
-    Write-Host "  /memory-start   - Load context at session start"
-    Write-Host "  /memory-save    - Save session summary"
-    Write-Host "  /memory-status  - Show memory system state"
-    Write-Host "  /memory-decide  - Record a decision (ADR)"
+    Write-Host "  /memory-start     - Load context at session start"
+    Write-Host "  /memory-save      - Save session summary"
+    Write-Host "  /memory-status    - Show memory system state"
+    Write-Host "  /memory-decide    - Record a decision (ADR)"
+    Write-Host "  /memory-search    - Search across memory files"
+    Write-Host "  /memory-knowledge - Manage knowledge base"
+    Write-Host "  /memory-plan      - Track implementation plans"
+    Write-Host "  /memory-review    - Review session history"
     Write-Host ""
 }
 
